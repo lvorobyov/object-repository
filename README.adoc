@@ -20,3 +20,7 @@ repository<widget>::instance().each([](auto && obj) {
 });
 repository<widget>::instance().remove(id);
 ----
+
+== Make you own repository
+
+See example in example/custom_repository.h
