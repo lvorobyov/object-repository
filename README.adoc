@@ -11,7 +11,7 @@ image::doc/dao.png[type hierarchy]
 ----
 using namespace dbo;
 
-auto id = repository<widget>::instance().create(make_shared<widget>());
+auto id = repository<widget>::instance().add(make_shared<widget>());
 auto object = repository<widget>::instance().get(id);
 object->set_field(value);
 repository<widget>::instance().edit(object);
