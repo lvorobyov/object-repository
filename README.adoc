@@ -2,9 +2,12 @@
 
 Unified crud repository for objects
 
+== Type hierarchy
+
+image::doc/dao.png[type hierarchy]
+
 == How to use
 
-[listing]
 ----
 using namespace dbo;
 

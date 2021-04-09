@@ -1,0 +1,133 @@
+@startuml
+
+
+
+
+
+/' Objects '/
+
+namespace dbo {
+	class already_added {
+		+what() : char* {query}
+	}
+}
+
+
+namespace dbo {
+	abstract class base_repository <template<typename T>> {
+		#{abstract} super() : crud_repository<T>& {query}
+		-_cs : mutable mutex
+		+get(u_long id) : shared_ptr<T> {query}
+		+add(const shared_ptr<T>& object) : u_long
+		+each(const function<void ( const shared_ptr<T>& )>& f) : void {query}
+		+edit(const shared_ptr<T>& object) : void
+		+remove(u_long id) : void
+		#{abstract} store(shared_ptr<T>const& object) : void {query}
+	}
+}
+
+
+namespace dbo {
+	abstract class crud_repository <template<typename T>> {
+		+~crud_repository()
+		+{abstract} get(u_long id) : shared_ptr<T> {query}
+		+{abstract} add(shared_ptr<T>const& object) : u_long
+		+{abstract} each(function<void ( const shared_ptr<T>& )>const& f) : void {query}
+		+{abstract} edit(shared_ptr<T>const& object) : void
+		+{abstract} remove(u_long id) : void
+	}
+}
+
+
+namespace dbo {
+	class object_repository <template<typename T>> {
+		#object_repository()
+		#exists(u_long id) : bool {query}
+		-_objects : mutable vector<shared_ptr<T>>
+		+{static} instance() : object_repository<T>&
+		+find(const function<bool ( shared_ptr<T>const& )>& pred) : shared_ptr<T> {query}
+		+get(u_long id) : shared_ptr<T> {query}
+		+add(shared_ptr<T>const& object) : u_long
+		+each(function<void ( const shared_ptr<T>& )>const& f) : void {query}
+		+edit(shared_ptr<T>const& object) : void
+		+remove(u_long id) : void
+		+remove(const function<bool ( shared_ptr<T>const& )>& pred) : void
+		#save(u_long id, const shared_ptr<T>& object) : void {query}
+	}
+}
+
+
+namespace dbo {
+	class pure_repository <template<typename T>> {
+		#pure_repository()
+		#exists(u_long id) : bool {query}
+		+{static} instance() : pure_repository<T>&
+		+get(u_long id) : shared_ptr<T> {query}
+		+add(shared_ptr<T>const& object) : u_long
+		+each(function<void ( const shared_ptr<T>& )>const& f) : void {query}
+		+edit(shared_ptr<T>const& object) : void
+		+remove(u_long id) : void
+		#save(u_long id, const shared_ptr<T>& object) : void {query}
+	}
+}
+
+
+namespace dbo {
+	class repository <template<typename T>> {
+		-repository()
+		+{static} instance() : repository<T>&
+	}
+}
+
+
+namespace dbo {
+	class tree_repository <template<typename T>> {
+		#tree_repository()
+		#exists(u_long id) : bool {query}
+		-_tree : mutable map<u_long, shared_ptr<T>>
+		-_first : mutable optional<size_t>
+		+{static} instance() : tree_repository<T>&
+		#save(u_long id, const shared_ptr<T>& object) : void {query}
+	}
+}
+
+
+
+
+
+/' Inheritance relationships '/
+
+namespace dbo {
+	crud_repository <|-- base_repository
+}
+
+
+namespace dbo {
+	crud_repository <|-- pure_repository
+}
+
+
+namespace dbo {
+	object_repository <|-- repository
+}
+
+
+namespace dbo {
+	object_repository <|-- tree_repository
+}
+
+
+namespace dbo {
+	pure_repository <|-- object_repository
+}
+
+
+
+
+
+/' Aggregation relationships '/
+
+
+
+
+@enduml
