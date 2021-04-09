@@ -1,0 +1,19 @@
+= object-repository
+
+Unified crud repository for objects
+
+== How to use
+
+[listing]
+----
+using namespace dbo;
+
+auto id = repository<widget>::instance().create(make_shared<widget>());
+auto object = repository<widget>::instance().get(id);
+object->set_field(value);
+repository<widget>::instance().edit(object);
+repository<widget>::instance().each([](auto && obj) {
+  cout << obj->get_id() << ": " << obj->get_field() << endl;
+});
+repository<widget>::instance().remove(id);
+----
